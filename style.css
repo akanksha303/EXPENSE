@@ -1,0 +1,74 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #4b0082; /* Purple text color */
+}
+
+h1, h3 {
+    text-align: center;
+    color: #6a0dad; /* Dark Purple */
+}
+
+/* Container Styles */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Navigation Links */
+.nav-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.nav-link {
+    background-color: #6a0dad; /* Purple background */
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #5a0c7d; /* Slightly darker purple on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.nav-link:active {
+    background-color: #4b0082; /* Darker shade of purple when clicked */
+}
+
+/* Expense Form Styles */
+.expense-form {
+    margin-top: 30px;
+    text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.expense-form input, .expense-form select, .expense-form button {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #6a0dad;
+    border-radius: 5px;
+}
+
+.expense-form button {
+    background-color: #6a0dad;
+    color: white;
+    cursor: pointer;
+}
+
+.expense-form button:hover {
+    background-color: #5a0c7d;
+}

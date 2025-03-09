@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spending Suggestions</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFD2A0; /* Light background color */
+            color: #4b0082; /* Purple text color */
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #740938; /* Dark Red for headings */
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .nav-link {
+            background-color: #AF1740; /* Medium red background */
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #CC2B52; /* Light red on hover */
+            transform: scale(1.05); /* Slight zoom effect */
+        }
+
+        .nav-link:active {
+            background-color: #740938; /* Darker shade of red when clicked */
+        }
+
+        /* Suggestion Card Styles */
+        .suggestion-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .suggestion-card h4 {
+            color: #6a0dad; /* Dark Purple */
+        }
+
+        .suggestion-card p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .suggestion-card ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .suggestion-card ul li {
+            margin: 10px 0;
+        }
+
+        /* Form Styles */
+        .form-container {
+            margin-top: 30px;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container input, .form-container button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #6a0dad;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            background-color: #AF1740; /* Medium red */
+            color: white;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #CC2B52; /* Light red on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Spending Suggestions</h1>
+        <h3>Total Expenses: ${{ total_expenses }}</h3>
+        
+        <!-- Navigation Links -->
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}" class="nav-link">Back to Dashboard</a>
+            <a href="{{ url_for('manage_expenses') }}" class="nav-link">Manage Expenses</a>
+        </div>
+
+        <!-- Spending Suggestions -->
+        <div class="suggestion-card">
+            <h4>Suggested Spending Plan</h4>
+            <p>Based on your current expenses, here are some suggestions to better manage your funds:</p>
+            <ul>
+                <li><strong>Food:</strong> Allocate 30% of your income to food expenses.</li>
+                <li><strong>Rent:</strong> Try to keep rent expenses below 40% of your income.</li>
+                <li><strong>Utilities:</strong> Keep utility expenses around 10% of your income.</li>
+                <li><strong>Entertainment:</strong> Limit entertainment expenses to 10% of your income.</li>
+            </ul>
+            <p><strong>Remaining Balance:</strong> You have <strong>${{ remaining_balance }}</strong> left to allocate.</p>
+        </div>
+
+        <!-- Allocate Funds Form -->
+        <div class="form-container">
+            <h3>Allocate Your Funds</h3>
+            <form method="POST" action="{{ url_for('spending_suggestions') }}">
+                <label for="food">Food:</label>
+                <input type="number" id="food" name="food" required min="0">
+                <label for="rent">Rent:</label>
+                <input type="number" id="rent" name="rent" required min="0">
+                <label for="utilities">Utilities:</label>
+                <input type="number" id="utilities" name="utilities" required min="0">
+                <label for="entertainment">Entertainment:</label>
+                <input type="number" id="entertainment" name="entertainment" required min="0">
+                <button type="submit">Submit Allocation</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

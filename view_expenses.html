@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Expenses</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFD2A0; /* Light background color */
+            color: #4b0082; /* Purple text color */
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #740938; /* Dark Red for headings */
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #ffffff; /* White background for the table */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #AF1740; /* Medium red background for table header */
+            color: white;
+        }
+
+        td {
+            color: #555;
+        }
+
+        /* Action Links */
+        a {
+            color: #AF1740; /* Medium red color for links */
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #CC2B52; /* Light red on hover */
+            text-decoration: underline;
+        }
+
+        /* Button Styles */
+        .btn-add-expense {
+            background-color: #AF1740; /* Medium red background */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-add-expense:hover {
+            background-color: #CC2B52; /* Light red on hover */
+            transform: scale(1.05); /* Slight zoom effect */
+        }
+    </style>
+</head>
+<body>
+    <h1>Expenses</h1>
+    <a href="{{ url_for('add_expense') }}" class="btn-add-expense">Add New Expense</a>
+    <br><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.name }}</td>
+                <td>${{ expense.amount }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.date }}</td>
+                <td>
+                    <a href="{{ url_for('delete_expense', id=expense.id) }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Total Expenses: ${{ total_expenses }}</h3>
+</body>
+</html>
+

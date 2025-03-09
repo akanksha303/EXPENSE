@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f5f5ff; /* Light background color */
+            color: #4b0082; /* Dark text color */
+        }
+        h1 {
+            text-align: center;
+            color: #740938; /* Dark red */
+        }
+        .form-container, .balance-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-container input, .form-container button, .balance-container input {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #AF1740; /* Medium red border */
+            border-radius: 5px;
+        }
+        .form-container button, .balance-container button {
+            background-color: #CC2B52; /* Light red for buttons */
+            color: white;
+            cursor: pointer;
+        }
+        .form-container button:hover, .balance-container button:hover {
+            background-color: #740938; /* Darker red when hovered */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #740938; /* Dark red header */
+            color: white;
+        }
+        td button {
+            background-color: #AF1740; /* Medium red for delete button */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        td button:hover {
+            background-color: #CC2B52; /* Light red for delete button on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Daily Expense Tracker</h1>
+
+    <!-- Balance Section -->
+    <div class="balance-container">
+        <input type="number" id="initialBalance" placeholder="Initial Balance" required>
+        <button onclick="setBalance()">Set Balance</button>
+        <p><strong>Balance: </strong><span id="currentBalance">0</span></p>
+    </div>
+
+    <!-- Expense Form -->
+    <div class="form-container">
+        <input type="date" id="date" required>
+        <input type="text" id="description" placeholder="Description" required>
+        <input type="number" id="amount" placeholder="Amount Spent" required>
+        <button onclick="addExpense()">Add Expense</button>
+    </div>
+
+    <!-- Expense Table -->
+    <table id="expenseTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Amount Spent</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Expense records will appear here -->
+        </tbody>
+    </table>
+
+    <script>
+        let currentBalance = 0;
+
+        // Load balance and expenses from localStorage
+        window.onload = function() {
+            const storedBalance = localStorage.getItem('balance');
+            if (storedBalance) {
+                currentBalance = parseFloat(storedBalance);
+                document.getElementById('currentBalance').textContent = currentBalance.toFixed(2);
+            }
+
+            // Load saved expenses
+            const storedExpenses = JSON.parse(localStorage.getItem('expenses'));
+            if (storedExpenses) {
+                storedExpenses.forEach(expense => {
+                    addExpenseToTable(expense.date, expense.description, expense.amount);
+                });
+            }
+        };
+
+        function setBalance() {
+            const initialBalance = parseFloat(document.getElementById('initialBalance').value);
+            if (isNaN(initialBalance) || initialBalance < 0) {
+                alert("Please enter a valid initial balance.");
+                return;
+            }
+            currentBalance = initialBalance;
+            document.getElementById('currentBalance').textContent = currentBalance.toFixed(2);
+            localStorage.setItem('balance', currentBalance.toFixed(2)); // Save balance to localStorage
+            document.getElementById('initialBalance').value = ''; // Clear the input field
+        }
+
+        function addExpense() {
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (!date || !description || isNaN(amount) || amount <= 0) {
+                alert("Please fill in all fields with valid data!");
+                return;
+            }
+
+            if (amount > currentBalance) {
+                alert("Insufficient balance! Please check your balance.");
+                return;
+            }
+
+            // Add expense to the table and save it in localStorage
+            addExpenseToTable(date, description, amount);
+
+            // Update balance and save to localStorage
+            currentBalance -= amount;
+            document.getElementById('currentBalance').textContent = currentBalance.toFixed(2);
+            localStorage.setItem('balance', currentBalance.toFixed(2));
+
+            // Save the expense in localStorage
+            saveExpense(date, description, amount);
+
+            // Clear input fields
+            document.getElementById('date').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('amount').value = '';
+        }
+
+        function addExpenseToTable(date, description, amount) {
+            const table = document.getElementById('expenseTable').querySelector('tbody');
+            const newRow = table.insertRow();
+
+            newRow.innerHTML = `
+                <td>${date}</td>
+                <td>${description}</td>
+                <td>${amount.toFixed(2)}</td>
+                <td><button onclick="deleteExpense(this, ${amount})">Delete</button></td>
+            `;
+        }
+
+        function saveExpense(date, description, amount) {
+            const storedExpenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            storedExpenses.push({ date, description, amount });
+            localStorage.setItem('expenses', JSON.stringify(storedExpenses));
+        }
+
+        function deleteExpense(button, amount) {
+            // Remove the row from the table
+            button.parentElement.parentElement.remove();
+
+            // Refund the amount to the balance
+            currentBalance += amount;
+            document.getElementById('currentBalance').textContent = currentBalance.toFixed(2);
+            localStorage.setItem('balance', currentBalance.toFixed(2)); // Save updated balance
+
+            // Remove the expense from localStorage
+            const storedExpenses = JSON.parse(localStorage.getItem('expenses'));
+            const newExpenses = storedExpenses.filter(expense => expense.amount !== amount || expense.date !== button.parentElement.parentElement.cells[0].textContent);
+            localStorage.setItem('expenses', JSON.stringify(newExpenses));
+        }
+    </script>
+</body>
+</html>

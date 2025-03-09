@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F9F2F2; /* Light background to contrast with the primary colors */
+            color: #4b0082;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #AF1740; /* Deep red color for heading */
+            margin-top: 30px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .form-container label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+            color: #CC2B52; /* Pink color for labels */
+        }
+
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #CC2B52; /* Pink border color */
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-container input[type="number"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .form-container button {
+            background-color: #CC2B52; /* Pink background for the button */
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #AF1740; /* Darker red on hover */
+        }
+
+        .form-container a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #CC2B52; /* Pink color for the link */
+            font-size: 16px;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: -15px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Expense</h1>
+    <div class="form-container">
+        <form method="POST">
+            <label for="name">Expense Name:</label>
+            <input type="text" id="name" name="name" required placeholder="Enter the expense name">
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required min="0.01" step="any" placeholder="Enter amount">
+
+            <label for="category">Category:</label>
+            <select name="category" required>
+                <option value="Food">Food</option>
+                <option value="Rent">Rent</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Entertainment">Entertainment</option>
+            </select>
+
+            <button type="submit">Add Expense</button>
+        </form>
+        
+        <a href="{{ url_for('index') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

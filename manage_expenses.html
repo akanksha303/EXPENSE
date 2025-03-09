@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Expenses</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #FFD2A0; /* Light background color */
+            color: #4b0082; /* Dark purple text */
+        }
+
+        h1 {
+            text-align: center;
+            color: #740938; /* Dark red for headings */
+        }
+
+        /* Container Styles */
+        .form-container, .category-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-container input, .form-container button, .category-container input, .category-container select, .category-container textarea {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #6a0dad; /* Purple border */
+            border-radius: 5px;
+        }
+
+        /* Buttons Styles */
+        .form-container button, .category-container button {
+            background-color: #AF1740; /* Medium red */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .form-container button:hover, .category-container button:hover {
+            background-color: #CC2B52; /* Light red on hover */
+            transform: scale(1.05);
+        }
+
+        .form-container button:active, .category-container button:active {
+            background-color: #740938; /* Dark red when clicked */
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #6a0dad; /* Purple header */
+            color: white;
+        }
+
+        /* Highlight Text */
+        .highlight-text {
+            color: #AF1740; /* Medium red for balance text */
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Manage Your Expenses</h1>
+
+    <!-- Balance Section -->
+    <div class="form-container">
+        <input type="number" id="totalBalance" placeholder="Total Balance" required>
+        <button onclick="setTotalBalance()">Set Total Balance</button>
+        <p><strong>Total Balance: </strong><span id="currentBalance" class="highlight-text">0</span></p>
+    </div>
+
+    <!-- Category Distribution Section -->
+    <div class="category-container">
+        <input type="text" id="categoryName" placeholder="Category Name (e.g., Food)" required>
+        <input type="number" id="categoryAmount" placeholder="Amount for this Category" required>
+        <textarea id="categoryNote" placeholder="Add a note for this category" rows="4" cols="50"></textarea><br>
+        <button onclick="addCategoryExpense()">Allocate Expense</button>
+    </div>
+
+    <!-- Allocated Categories Table -->
+    <table id="categoryTable">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount Allocated</th>
+                <th>Note</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Category records will appear here -->
+        </tbody>
+    </table>
+
+    <script>
+        let totalBalance = 0;
+        let allocatedBalance = 0;
+
+        // Load balance from localStorage
+        window.onload = function() {
+            const storedBalance = localStorage.getItem('totalBalance');
+            if (storedBalance) {
+                totalBalance = parseFloat(storedBalance);
+                document.getElementById('currentBalance').textContent = totalBalance.toFixed(2);
+            }
+        };
+
+        // Set total balance
+        function setTotalBalance() {
+            const balance = parseFloat(document.getElementById('totalBalance').value);
+            if (isNaN(balance) || balance < 0) {
+                alert("Please enter a valid balance.");
+                return;
+            }
+            totalBalance = balance;
+            document.getElementById('currentBalance').textContent = totalBalance.toFixed(2);
+            localStorage.setItem('totalBalance', totalBalance.toFixed(2)); // Save total balance to localStorage
+            document.getElementById('totalBalance').value = ''; // Clear the input field
+        }
+
+        // Add category allocation
+        function addCategoryExpense() {
+            const category = document.getElementById('categoryName').value;
+            const amount = parseFloat(document.getElementById('categoryAmount').value);
+            const note = document.getElementById('categoryNote').value;
+
+            if (!category || isNaN(amount) || amount <= 0 || !note) {
+                alert("Please fill in all fields with valid data!");
+                return;
+            }
+
+            if (allocatedBalance + amount > totalBalance) {
+                alert("You cannot allocate more than your total balance.");
+                return;
+            }
+
+            // Add category to the table
+            const table = document.getElementById('categoryTable').querySelector('tbody');
+            const newRow = table.insertRow();
+
+            newRow.innerHTML = `
+                <td>${category}</td>
+                <td>${amount.toFixed(2)}</td>
+                <td>${note}</td>
+                <td><button onclick="deleteCategoryExpense(this, ${amount})">Delete</button></td>
+            `;
+
+            // Update allocated balance
+            allocatedBalance += amount;
+            document.getElementById('currentBalance').textContent = (totalBalance - allocatedBalance).toFixed(2);
+
+            // Clear input fields
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryAmount').value = '';
+            document.getElementById('categoryNote').value = '';
+
+            // Save category data to localStorage
+            saveCategoryExpense(category, amount, note);
+        }
+
+        // Save category expense data to localStorage
+        function saveCategoryExpense(category, amount, note) {
+            const storedCategories = JSON.parse(localStorage.getItem('categoryExpenses')) || [];
+            storedCategories.push({ category, amount, note });
+            localStorage.setItem('categoryExpenses', JSON.stringify(storedCategories));
+        }
+
+        // Delete category expense
+        function deleteCategoryExpense(button, amount) {
+            // Remove the row from the table
+            button.parentElement.parentElement.remove();
+
+            // Update the allocated balance
+            allocatedBalance -= amount;
+            document.getElementById('currentBalance').textContent = (totalBalance - allocatedBalance).toFixed(2);
+
+            // Remove category data from localStorage
+            const storedCategories = JSON.parse(localStorage.getItem('categoryExpenses'));
+            const newCategories = storedCategories.filter(expense => expense.amount !== amount || expense.category !== button.parentElement.parentElement.cells[0].textContent);
+            localStorage.setItem('categoryExpenses', JSON.stringify(newCategories));
+        }
+    </script>
+</body>
+</html>

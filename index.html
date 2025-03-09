@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFD2A0; /* Light background color */
+            color: #4b0082; /* Dark purple text */
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #740938; /* Dark red for headings */
+            margin: 20px 0;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background-color: #CC2B52; /* Light red */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .nav-link {
+            background-color: #AF1740; /* Medium red */
+            color: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link:hover {
+            background-color: #EFB6C8; /* Light pink on hover */
+            transform: scale(1.05);
+        }
+
+        .nav-link:active {
+            background-color: #740938; /* Dark red when clicked */
+        }
+
+        /* Responsive Design */
+        @media (min-width: 600px) {
+            .nav-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-around;
+            }
+
+            .nav-link {
+                margin: 10px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Expense Tracker Dashboard</h1>
+        <div class="highlight-box">
+            Total Expenses: ${{ total_expenses }}
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="nav-links">
+            <a href="{{ url_for('add_expense') }}" class="nav-link">Add New Expense</a>
+            <a href="{{ url_for('view_expenses') }}" class="nav-link">View Expenses</a>
+            <a href="{{ url_for('spending_suggestions') }}" class="nav-link">Spending Suggestions</a>
+            <a href="{{ url_for('manage_expenses') }}" class="nav-link">Manage Expenses</a>
+            <a href="{{ url_for('daily_record') }}" class="nav-link">Daily Record</a>
+        </div>
+    </div>
+</body>
+</html>
