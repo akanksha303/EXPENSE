@@ -53,9 +53,5 @@ expense-tracker/
    http://127.0.0.1:5000
    ```
 
-## License
-MIT License
-
-## Contact
-For queries, reach out at [your.email@example.com].
+# end 
 
